@@ -3,15 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AutoAudit-360</title>
+  <title>AutoAudit-360: Trustworthy AI Audit Suite</title>
+  <meta name="description" content="AutoAudit-360 audits ML models for fairness, explainability, robustness and privacy, and maps the results to a regulatory readiness checklist.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="hero">
+
+  <nav class="nav">
+    <a class="brand" href="#top">AutoAudit-360</a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#how">How it works</a>
+      <a href="#findings">Findings</a>
+      <a href="#compliance">Compliance</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <p class="eyebrow">Trustworthy and Responsible AI project</p>
     <h1>AutoAudit-360</h1>
-    <p>End-to-End Trustworthy AI Audit & Regulatory Compliance Suite</p>
-    <a class="btn" href="YOUR_STREAMLIT_URL">Try the Demo</a>
+    <p class="tagline">End-to-End Trustworthy AI Audit and Regulatory Compliance Suite</p>
+    <p class="lead">Upload a dataset, and AutoAudit-360 trains a baseline model, tests it for bias, explainability, robustness and privacy risk, and gives you a Trust Score, a compliance readiness checklist, and a downloadable PDF report.</p>
+    <div class="cta">
+      <a class="btn primary" href="YOUR_STREAMLIT_URL">Try the live demo</a>
+      <a class="btn" href="https://github.com/manasmandale26-spec/autoaudit-360">View on GitHub</a>
+    </div>
+    <p class="note">The demo may take about 30 seconds to wake up if it has been idle.</p>
   </header>
-  <section id="features"><h2>Features</h2> ... </section>
+
+  <section class="section" id="problem">
+    <h2>The problem</h2>
+    <p class="narrow">AI systems now help decide who gets a loan, a job or a service. Models can be accurate overall and still treat groups differently, hide how they decide, break under slightly noisy inputs, or be trained on personal data that should never have been collected. Regulations such as the EU AI Act and India's DPDP Act expect organisations to check for these risks, but doing it by hand is slow and inconsistent. AutoAudit-360 turns those checks into one repeatable workflow.</p>
+  </section>
+
+  <section class="section alt" id="features">
+    <h2>Five audit modules</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Fairness</h3>
+        <p>Measures demographic parity and equalized odds gaps between groups, plus accuracy per group, using Fairlearn.</p>
+      </article>
+      <article class="card">
+        <h3>Explainability</h3>
+        <p>Uses SHAP to show which features drive predictions, and flags when a sensitive attribute is a top driver.</p>
+      </article>
+      <article class="card">
+        <h3>Robustness</h3>
+        <p>Adds increasing Gaussian noise to the test data and tracks how much accuracy drops.</p>
+      </article>
+      <article class="card">
+        <h3>Privacy</h3>
+        <p>Scans column names and values for Aadhaar, PAN, phone numbers, emails and other likely personal data.</p>
+      </article>
+      <article class="card">
+        <h3>Compliance</h3>
+        <p>Combines all results into a checklist mapped to regulations, and a weighted 0 to 100 Trust Score.</p>
+      </article>
+      <article class="card">
+        <h3>PDF report</h3>
+        <p>Exports the scores, charts, checklist and limitations as a report you can attach to your records.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Upload</strong><span>Choose the sample dataset or upload a CSV, then pick the target and sensitive attribute.</span></li>
+      <li><strong>Audit</strong><span>A baseline Random Forest is trained and the four audit modules run on it.</span></li>
+      <li><strong>Score</strong><span>Each module gets a 0 to 100 score, combined into one Trust Score.</span></li>
+      <li><strong>Report</strong><span>Review the checklist and download the PDF.</span></li>
+    </ol>
+  </section>
+
+  <section class="section alt" id="findings">
+    <h2>Demo findings: UCI Adult dataset</h2>
+    <p class="narrow">We audited a random sample of 5,000 rows of the UCI Adult income dataset, predicting whether income exceeds $50K, with <em>sex</em> as the sensitive attribute. These numbers come from one run of the default settings and will vary slightly between runs.</p>
+
+    <div class="stats">
+      <div class="stat"><span class="num">90</span><span class="label">Trust Score (out of 100)</span></div>
+      <div class="stat"><span class="num">85.6%</span><span class="label">Model accuracy</span></div>
+      <div class="stat warn"><span class="num">0.166</span><span class="label">Demographic parity gap (threshold 0.10)</span></div>
+      <div class="stat"><span class="num">0.069</span><span class="label">Equalized odds gap</span></div>
+    </div>
+
+    <div class="grid two">
+      <article class="card">
+        <h3>The model is biased even with a high score</h3>
+        <p>The parity gap of 0.166 means the model predicts the higher income class noticeably more often for one sex than the other, so the bias check fails. Because a failed check caps the rating at "Needs attention", a high Trust Score cannot hide a failed fairness check.</p>
+      </article>
+      <article class="card">
+        <h3>Fairness metrics can disagree</h3>
+        <p>The equalized odds gap (0.069) is under the threshold while the parity gap is not. Passing one fairness metric does not mean a model is fair, so the tool reports both.</p>
+      </article>
+      <article class="card">
+        <h3>Proxy discrimination</h3>
+        <p>Sex is not among the model's top three drivers, yet the gap remains. The top drivers include marital status and relationship features, which correlate strongly with sex. Removing a sensitive column does not remove the bias.</p>
+      </article>
+      <article class="card">
+        <h3>Robust and privacy-clean</h3>
+        <p>Accuracy held up well under added noise (robustness score 99), and the dataset contained no direct personal identifiers.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="compliance">
+    <h2>Compliance coverage</h2>
+    <p class="narrow">Each checklist item is mapped to the frameworks below. These are readiness checks, not a legal assessment.</p>
+    <table class="table">
+      <thead>
+        <tr><th>Trustworthy AI pillar</th><th>Module</th><th>Frameworks referenced</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fairness and non-discrimination</td><td>Fairness, Explainability</td><td>EU AI Act, NIST AI RMF, ISO/IEC 42001</td></tr>
+        <tr><td>Transparency and explainability</td><td>Explainability</td><td>EU AI Act, NIST AI RMF, ISO/IEC 42001</td></tr>
+        <tr><td>Robustness and reliability</td><td>Robustness</td><td>EU AI Act, NIST AI RMF, ISO/IEC 42001</td></tr>
+        <tr><td>Privacy and data governance</td><td>Privacy</td><td>India DPDP Act 2023, EU AI Act, ISO/IEC 42001</td></tr>
+        <tr><td>Accountability and human oversight</td><td>Marked "Not assessed" for manual review</td><td>EU AI Act, NIST AI RMF, ISO/IEC 42001</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section alt" id="limitations">
+    <h2>Limitations</h2>
+    <ul class="narrow list">
+      <li>The tool audits a baseline model it trains itself, not a separately trained production model.</li>
+      <li>Scores, weights and thresholds are adjustable heuristics, not values defined by any regulation.</li>
+      <li>Privacy screening is pattern-based and cannot detect names or free-text addresses by value.</li>
+      <li>Human oversight and documentation cannot be verified from data, so they are marked "Not assessed".</li>
+      <li>AutoAudit-360 is a compliance readiness screen, not a legal opinion or a certification.</li>
+    </ul>
+  </section>
+
+  <footer class="footer">
+    <p>
+      <a href="YOUR_STREAMLIT_URL">Live demo</a> ·
+      <a href="https://github.com/manasmandale26-spec/autoaudit-360">GitHub</a>
+    </p>
+    <p>Built with Python, Fairlearn, SHAP, scikit-learn and Streamlit.</p>
+  </footer>
+
 </body>
 </html>
