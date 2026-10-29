@@ -29,7 +29,9 @@ def explain_audit(model, X_train, X_test, sensitive_col=None,
 
     # Does the sensitive attribute rank among the top 3 drivers?
     sensitive_in_top3 = bool(
-        sensitive_col is not None and sensitive_col in importance.index[:3]
+        sensitive_col is not None
+        and any(c == sensitive_col or c.startswith(f"{sensitive_col}_")
+                for c in importance.index[:3])
     )
 
     # Simple heuristic score: lower if a sensitive feature dominates

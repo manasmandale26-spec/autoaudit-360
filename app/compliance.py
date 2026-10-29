@@ -123,7 +123,7 @@ def compliance_audit(fairness=None, explain=None, robustness=None, privacy=None)
         "checklist": checklist,
         "module_scores": scores,
         "trust_score": trust_score,
-        "rating": _rating(trust_score),
+        "rating": _rating(trust_score, any(c["status"] == "Fail" for c in checklist)),
         "passed": passed,
         "assessed": len(assessed),
         "not_assessed": len(checklist) - len(assessed),
@@ -141,10 +141,10 @@ def _fairness_score(fairness):
     return int(round(100 * max(0.0, 1 - worst_gap / 0.5)))
 
 
-def _rating(score):
+def _rating(score, any_fail=False):
     if score is None:
         return "Not available"
-    if score >= 80:
+    if score >= 80 and not any_fail:
         return "Good"
     if score >= 60:
         return "Needs attention"
